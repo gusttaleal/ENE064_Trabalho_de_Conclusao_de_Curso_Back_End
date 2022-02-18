@@ -1,63 +1,52 @@
 const { db } = require("../configurations/FirebaseConfig");
 const {
-  getDocs,
-  query,
-  collection,
-  orderBy,
-  addDoc,
   doc,
-  deleteDoc,
-  updateDoc,
+  query,
+  orderBy,
+  collection,
+  addDoc,
   getDoc,
+  getDocs,
+  updateDoc,
+  deleteDoc,
 } = require("firebase/firestore");
 
-const createDevice = async (device) => {
+module.exports.createDevice = async (device) => {
   try {
     await addDoc(collection(db, "devices"), device);
   } catch (error) {
-    throw Error({ path: "DeviceRepository - createDevice()", error: error });
+    throw Error(JSON.stringify({ path: "DeviceRepository - createDevice()", error: error.message }));
   }
 };
 
-const readDevice = async (id = null) => {
+module.exports.readDevice = async (id = null) => {
   try {
-    if (id === null) {
-      const data = await getDocs(
-        query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc"))
-      );
-      const result = data.docs.map((_doc) => ({
-        ..._doc.data(),
-        deviceId: _doc.id,
-      }));
-      return result;
-    } else {
+    if (id != null) {
       const _doc = await getDoc(doc(db, "devices", id));
       const result = [{ ..._doc.data(), deviceId: _doc.id }];
       return result;
+    } else {
+      const data = await getDocs(query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc")));
+      const result = data.docs.map((_doc) => ({ ..._doc.data(), deviceId: _doc.id }));
+      return result;
     }
   } catch (error) {
-    throw Error({ path: "DeviceRepository - readDevice()", error: error });
+    throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", error: error.message }));
   }
 };
 
-const updateDevice = async (id, device) => {
-  const reference = doc(db, "devices", id);
+module.exports.updateDevice = async (id, device) => {
   try {
-    const result = await updateDoc(reference, device);
-    return result;
+    await updateDoc(doc(db, "devices", id), device);
   } catch (error) {
-    throw Error({ path: "DeviceRepository - updateDevice()", error: error });
+    throw Error(JSON.stringify({ path: "DeviceRepository - updateDevice()", error: error.message }));
   }
 };
 
-const deleteDevice = async (id) => {
-  const reference = doc(db, "devices", id);
+module.exports.deleteDevice = async (id) => {
   try {
-    const result = await deleteDoc(reference);
-    return result;
+    await deleteDoc(doc(db, "devices", id));
   } catch (error) {
-    throw Error({ path: "DeviceRepository - deleteDevice()", error: error });
+    throw Error(JSON.stringify({ path: "DeviceRepository - deleteDevice()", error: error.message }));
   }
 };
-
-export { createDevice, readDevice, updateDevice, deleteDevice };
