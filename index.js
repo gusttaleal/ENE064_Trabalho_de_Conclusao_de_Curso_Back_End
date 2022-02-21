@@ -12,8 +12,8 @@ app.use(express.json());
 app.post("/postDevice", async (req, res) => {
   try {
     const device = new DeviceModel().create(req.body);
-    await createDevice(device);
-    res.status(200).send();
+    const id = await createDevice(device);
+    res.status(200).send({ id });
   } catch (error) {
     res.status(500).send(error);
   }

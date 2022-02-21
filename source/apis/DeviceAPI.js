@@ -13,7 +13,8 @@ const {
 
 module.exports.createDevice = async (device) => {
   try {
-    await addDoc(collection(db, "devices"), device);
+    const result = await addDoc(collection(db, "devices"), device);
+    return result.id;
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - createDevice()", error: error.message }));
   }
