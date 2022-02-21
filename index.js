@@ -1,20 +1,28 @@
 const express = require("express");
 const app = express();
 const PORT = 8080;
-const { createDevice, readDevice, updateDevice, deleteDevice } = require("./source/apis/DeviceAPI.js");
+const {
+  createDevice,
+  readDevice,
+  readDevices,
+  updateDevice,
+  deleteDevice,
+  deleteDevices,
+} = require("./source/services/DeviceServices.js");
+
 const { createData } = require("./source/apis/DataAPI.js");
 
-const DeviceModel = require("./source/models/DeviceModel.js");
 const DataModel = require("./source/models/DataModel.js");
 
 app.use(express.json());
 
 app.post("/postDevice", async (req, res) => {
   try {
-    const device = new DeviceModel().create(req.body);
-    const id = (await createDevice(device)).id;
+    const device = req.body;
 
-    res.status(200).send({ id });
+    const id = await createDevice(device);
+
+    res.status(200).send(id);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -37,21 +45,9 @@ app.get("/getDevice", async (req, res) => {
   try {
     const { deviceId } = req.body;
 
-    const result = await readDevice(deviceId);
-    device = new DeviceModel().get(result[0]);
+    let devices;
 
-    res.status(200).send(device);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
-
-app.get("/getDevices", async (req, res) => {
-  try {
-    const result = await readDevice();
-    const devices = result.map((device) => {
-      return new DeviceModel().get(device);
-    });
+    deviceId ? (devices = await readDevice(deviceId)) : (devices = await readDevices());
 
     res.status(200).send(devices);
   } catch (error) {
@@ -64,16 +60,10 @@ app.patch("/patchDevice", async (req, res) => {
     const { deviceId } = req.body;
 
     let newDevice = req.body;
-    newDevice = new DeviceModel().get(newDevice);
 
-    let oldDevice = await readDevice(deviceId);
-    oldDevice = new DeviceModel().get(oldDevice[0]);
+    newDevice = await updateDevice(deviceId, newDevice);
 
-    newDevice = new DeviceModel().update(oldDevice, newDevice);
-
-    await updateDevice(deviceId, newDevice);
-
-    res.status(200).send();
+    res.status(200).send(newDevice);
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -83,7 +73,7 @@ app.delete("/deleteDevice", async (req, res) => {
   try {
     const { deviceId } = req.body;
 
-    await deleteDevice(deviceId);
+    deviceId ? await deleteDevice(deviceId) : await deleteDevices();
 
     res.status(200).send();
   } catch (error) {

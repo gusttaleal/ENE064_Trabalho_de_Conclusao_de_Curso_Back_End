@@ -20,17 +20,21 @@ module.exports.createDevice = async (device) => {
   }
 };
 
-module.exports.readDevice = async (id = null) => {
+module.exports.readDevice = async (id) => {
   try {
-    if (id != null) {
-      const _doc = await getDoc(doc(db, "devices", id));
-      const result = [{ ..._doc.data(), deviceId: _doc.id }];
-      return result;
-    } else {
-      const data = await getDocs(query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc")));
-      const result = data.docs.map((_doc) => ({ ..._doc.data(), deviceId: _doc.id }));
-      return result;
-    }
+    const _doc = await getDoc(doc(db, "devices", id));
+    const result = [{ ..._doc.data(), deviceId: _doc.id }];
+    return result;
+  } catch (error) {
+    throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", error: error.message }));
+  }
+};
+
+module.exports.readDevices = async () => {
+  try {
+    const data = await getDocs(query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc")));
+    const result = data.docs.map((_doc) => ({ ..._doc.data(), deviceId: _doc.id }));
+    return result;
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", error: error.message }));
   }
