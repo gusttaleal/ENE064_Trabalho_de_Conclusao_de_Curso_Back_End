@@ -1,21 +1,21 @@
 const { serverTimestamp } = require("firebase/firestore");
 
 class DeviceModel {
-  _defaultId;
-  _defaultName;
-  _defaultType;
-  _defaultStatus;
-  _defaultCreatedAt;
-  _defaultUpdatedAt;
+  // _defaultId;
+  // _defaultName;
+  // _defaultType;
+  // _defaultStatus;
+  // _defaultCreatedAt;
+  // _defaultUpdatedAt;
 
-  constructor(device = {}) {
-    this._defaultId = this._verifyStrigData(device.deviceId);
-    this._defaultName = this._verifyStrigData(device.deviceName);
-    this._defaultType = this._verifyStrigData(device.deviceType);
-    this._defaultStatus = this._verifyBooleanData(device.deviceStatus);
-    this._defaultCreatedAt = this._verifyDateData(device.deviceCreatedAt);
-    this._defaultUpdatedAt = this._verifyDateData(device.deviceUpdatedAt);
-  }
+  // constructor(device = {}) {
+  //   this._defaultId = this._verifyStrigData(device.deviceId);
+  //   this._defaultName = this._verifyStrigData(device.deviceName);
+  //   this._defaultType = this._verifyStrigData(device.deviceType);
+  //   this._defaultStatus = this._verifyBooleanData(device.deviceStatus);
+  //   this._defaultCreatedAt = this._verifyDateData(device.deviceCreatedAt);
+  //   this._defaultUpdatedAt = this._verifyDateData(device.deviceUpdatedAt);
+  // }
 
   create(device = {}) {
     return {
