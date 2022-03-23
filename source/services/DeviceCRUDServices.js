@@ -4,30 +4,34 @@ const DeviceModel = require("../models/DeviceModel.js");
 module.exports.createDevice = async (device) => {
   try {
     const _device = new DeviceModel(device);
-    const id = (await createDevice(_device.create())).id;
-    return { id };
+    const deviceId = (await createDevice(_device.create())).id;
+    return { deviceId };
   } catch (error) {
     throw error;
   }
 };
 
-module.exports.readDevice = async (deviceId) => {
-  try {
-    const result = await readDevice(deviceId);
-    const device = new DeviceModel(result[0]);
-    return device.get();
-  } catch (error) {
-    throw error;
+module.exports.readDevice = async (bodyRequest) => {
+  const { deviceId } = bodyRequest;
+
+  if (deviceId) {
+    try {
+      const result = await readDevice(deviceId);
+      return new DeviceModel(result[0]).get();
+    } catch (error) {
+      throw error;
+    }
+  } else {
+    return this.readDevices();
   }
 };
 
 module.exports.readDevices = async () => {
   try {
     const result = await readDevices();
-    const devices = result.map((device) => {
+    return result.map((device) => {
       return new DeviceModel(device).get();
     });
-    return devices;
   } catch (error) {
     throw error;
   }

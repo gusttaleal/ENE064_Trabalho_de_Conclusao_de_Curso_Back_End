@@ -8,9 +8,9 @@ const {
   updateDevice,
   deleteDevice,
   deleteDevices,
-} = require("./source/services/DeviceServices.js");
+} = require("./source/services/DeviceCRUDServices.js");
 
-const { createData } = require("./source/apis/DataAPI.js");
+const { createData, readData } = require("./source/services/DataCRUDService.js");
 
 const DataModel = require("./source/models/DataModel.js");
 
@@ -20,9 +20,9 @@ app.post("/postDevice", async (req, res) => {
   try {
     const device = req.body;
 
-    const id = await createDevice(device);
+    const deviceId = await createDevice(device);
 
-    res.status(200).send(id);
+    res.status(200).send(deviceId);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -30,12 +30,11 @@ app.post("/postDevice", async (req, res) => {
 
 app.post("/postData", async (req, res) => {
   try {
-    const { deviceId } = req.body;
+    const data = req.body;
 
-    const data = new DataModel().create(req.body);
-    const id = (await createData(deviceId, data)).id;
+    const dataId = await createData(data);
 
-    res.status(200).send({ id });
+    res.status(200).send(dataId);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -43,13 +42,23 @@ app.post("/postData", async (req, res) => {
 
 app.get("/getDevice", async (req, res) => {
   try {
-    const { deviceId } = req.body;
+    const bodyRequest = req.body;
 
-    let devices;
+    const device = await readDevice(bodyRequest);
 
-    deviceId ? (devices = await readDevice(deviceId)) : (devices = await readDevices());
+    res.status(200).send(device);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
-    res.status(200).send(devices);
+app.get("/getData", async (req, res) => {
+  try {
+    const bodyRequest = req.body;
+
+    const data = await readData(bodyRequest);
+
+    res.status(200).send(data);
   } catch (error) {
     res.status(500).send(error);
   }

@@ -1,62 +1,62 @@
 const { serverTimestamp } = require("firebase/firestore");
 
 class DeviceModel {
-  CreatedAt;
-  Id;
-  Name;
-  Type;
-  Status;
-  UpdatedAt;
+  _createdAt;
+  _deviceId;
+  _name;
+  _type;
+  _status;
+  _updatedAt;
 
   constructor(device = {}) {
-    this.CreatedAt = this._verifyDateData(device.deviceCreatedAt);
-    this.Id = this._verifyStrigData(device.deviceId);
-    this.Name = this._verifyStrigData(device.deviceName);
-    this.Type = this._verifyStrigData(device.deviceType);
-    this.Status = this._verifyBooleanData(device.deviceStatus);
-    this.UpdatedAt = this._verifyDateData(device.deviceUpdatedAt);
+    this._createdAt = this._verifyDateData(device.deviceCreatedAt);
+    this._deviceId = this._verifyStrigData(device.deviceId);
+    this._name = this._verifyStrigData(device.deviceName);
+    this._type = this._verifyStrigData(device.deviceType);
+    this._status = this._verifyBooleanData(device.deviceStatus);
+    this._updatedAt = this._verifyDateData(device.deviceUpdatedAt);
   }
 
   create() {
     return {
       deviceCreatedAt: serverTimestamp(),
-      deviceName: this.Name,
-      deviceType: this.Type,
-      deviceStatus: this.Status,
+      deviceName: this._name,
+      deviceType: this._type,
+      deviceStatus: this._status,
       deviceUpdatedAt: serverTimestamp(),
     };
   }
 
   get() {
     return {
-      deviceCreatedAt: this.CreatedAt,
-      deviceId: this.Id,
-      deviceName: this.Name,
-      deviceType: this.Type,
-      deviceStatus: this.Status,
-      deviceUpdatedAt: this.UpdatedAt,
+      deviceCreatedAt: this._createdAt,
+      deviceId: this._deviceId,
+      deviceName: this._name,
+      deviceType: this._type,
+      deviceStatus: this._status,
+      deviceUpdatedAt: this._updatedAt,
     };
   }
 
   toJSON() {
     return {
-      deviceName: this.Name,
-      deviceType: this.Type,
-      deviceStatus: this.Status,
-      deviceUpdatedAt: this.UpdatedAt,
+      deviceName: this._name,
+      deviceType: this._type,
+      deviceStatus: this._status,
+      deviceUpdatedAt: this._updatedAt,
     };
   }
 
   update(oldDevice = {}) {
-    this.Name = this.Name != "" ? this.Name : oldDevice.deviceName;
-    this.Type = this.Type != "" ? this.Type : oldDevice.deviceType;
-    this.Status =
-      this.Status != ""
-        ? oldDevice.deviceStatus === this.Status
+    this._name = this._name != "" ? this._name : oldDevice.deviceName;
+    this._type = this._type != "" ? this._type : oldDevice.deviceType;
+    this._status =
+      this._status != ""
+        ? oldDevice.deviceStatus === this._status
           ? oldDevice.deviceStatus
-          : this.Status
+          : this._status
         : oldDevice.deviceStatus;
-    this.UpdatedAt = serverTimestamp();
+    this._updatedAt = serverTimestamp();
   }
 
   _verifyStrigData(data) {

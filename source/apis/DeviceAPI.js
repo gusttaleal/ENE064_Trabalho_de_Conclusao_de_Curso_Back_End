@@ -13,18 +13,16 @@ const {
 
 module.exports.createDevice = async (device) => {
   try {
-    const result = await addDoc(collection(db, "devices"), device);
-    return result;
+    return await addDoc(collection(db, "devices"), device);
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - createDevice()", error: error.message }));
   }
 };
 
-module.exports.readDevice = async (id) => {
+module.exports.readDevice = async (deviceId) => {
   try {
-    const _doc = await getDoc(doc(db, "devices", id));
-    const result = [{ ..._doc.data(), deviceId: _doc.id }];
-    return result;
+    const _doc = await getDoc(doc(db, "devices", deviceId));
+    return [{ ..._doc.data(), deviceId: _doc.id }];
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", error: error.message }));
   }
@@ -33,10 +31,9 @@ module.exports.readDevice = async (id) => {
 module.exports.readDevices = async () => {
   try {
     const data = await getDocs(query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc")));
-    const result = data.docs.map((_doc) => ({ ..._doc.data(), deviceId: _doc.id }));
-    return result;
+    return data.docs.map((_doc) => ({ ..._doc.data(), deviceId: _doc.id }));
   } catch (error) {
-    throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", error: error.message }));
+    throw Error(JSON.stringify({ path: "DeviceRepository - readDevices()", error: error.message }));
   }
 };
 
