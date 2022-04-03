@@ -12,7 +12,7 @@ module.exports.createData = async (data) => {
 };
 
 module.exports.readData = async (bodyRequest) => {
-  const { deviceId, dataId } = _checkbody(bodyRequest);
+  const { deviceId, dataId } = _checkBody(bodyRequest);
 
   if (dataId) {
     try {
@@ -54,7 +54,7 @@ module.exports.deleteData = async (deviceId) => {
   }
 };
 
-const _checkbody = (bodyRequest) => {
+const _checkBody = (bodyRequest) => {
   const deviceId = bodyRequest.deviceId;
   const dataId = bodyRequest.dataId;
   if (deviceId) {
