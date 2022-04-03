@@ -1,5 +1,5 @@
 const { db } = require("../configurations/FirebaseConfig");
-const { doc, query, orderBy, collection, addDoc, getDoc, getDocs } = require("firebase/firestore");
+const { doc, query, orderBy, collection, addDoc, getDoc, getDocs, deleteDoc } = require("firebase/firestore");
 
 module.exports.createData = async (deviceId, data) => {
   try {
@@ -11,8 +11,7 @@ module.exports.createData = async (deviceId, data) => {
 
 module.exports.readData = async (deviceId, dataId) => {
   try {
-    const _doc = await getDoc(doc(db, "devices", deviceId, "data", dataId));
-    return [{ ..._doc.data(), dataId: _doc.id }];
+    return await getDoc(doc(db, "devices", deviceId, "data", dataId));
   } catch (error) {
     throw Error(JSON.stringify({ path: "DataRepository - readData()", error: error.message }));
   }
@@ -20,9 +19,16 @@ module.exports.readData = async (deviceId, dataId) => {
 
 module.exports.readDatas = async (deviceId) => {
   try {
-    const data = await getDocs(query(collection(db, "devices", deviceId, "data"), orderBy("recivedDataAt", "asc")));
-    return data.docs.map((_doc) => ({ ..._doc.data(), dataId: _doc.id }));
+    return await getDocs(query(collection(db, "devices", deviceId, "data"), orderBy("recivedDataAt", "asc")));
   } catch (error) {
     throw Error(JSON.stringify({ path: "DataRepository - readDatas()", error: error.message }));
+  }
+};
+
+module.exports.deleteData = async (deviceId, dataId) => {
+  try {
+    await deleteDoc(doc(db, "devices", deviceId, "data", dataId));
+  } catch (error) {
+    throw Error(JSON.stringify({ path: "DataRepository - deleteData()", error: error.message }));
   }
 };

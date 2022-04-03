@@ -1,54 +1,54 @@
 const { serverTimestamp } = require("firebase/firestore");
 
 class dataModel {
-  _dataId;
-  _recivedData;
-  _recivedDataAt;
-  _transmittedData;
-  _transmittedDataAt;
+  #dataId;
+  #recivedData;
+  #recivedDataAt;
+  #transmittedData;
+  #transmittedDataAt;
 
   constructor(data = {}) {
-    this._dataId = this._verifyStrigData(data.dataId);
-    this._recivedData = this._verifyStrigData(data.recivedData);
-    this._recivedDataAt = this._verifyDateData(data.recivedDataAt);
-    this._transmittedData = this._verifyStrigData(data.transmittedData);
-    this._transmittedDataAt = this._verifyDateData(data.transmittedDataAt);
+    this.#dataId = this._verifyStrigData(data.dataId);
+    this.#recivedData = this._verifyStrigData(data.recivedData);
+    this.#recivedDataAt = this._verifyDateData(data.recivedDataAt);
+    this.#transmittedData = this._verifyStrigData(data.transmittedData);
+    this.#transmittedDataAt = this._verifyDateData(data.transmittedDataAt);
   }
 
   create() {
     return {
-      recivedData: this._recivedData,
+      recivedData: this.#recivedData,
       recivedDataAt: serverTimestamp(),
-      transmittedData: this._transmittedData,
+      transmittedData: this.#transmittedData,
       transmittedDataAt: serverTimestamp(),
     };
   }
 
   get() {
     return {
-      dataId: this._dataId,
-      recivedData: this._recivedData,
-      recivedDataAt: this._recivedDataAt,
-      transmittedData: this._transmittedData,
-      transmittedDataAt: this._transmittedDataAt,
+      dataId: this.#dataId,
+      recivedData: this.#recivedData,
+      recivedDataAt: this.#recivedDataAt,
+      transmittedData: this.#transmittedData,
+      transmittedDataAt: this.#transmittedDataAt,
     };
   }
 
   toJSON() {
     return {
-      recivedData: this._recivedData,
-      recivedDataAt: this._recivedDataAt,
-      transmittedData: this._transmittedData,
-      transmittedDataAt: this._transmittedDataAt,
+      recivedData: this.#recivedData,
+      recivedDataAt: this.#recivedDataAt,
+      transmittedData: this.#transmittedData,
+      transmittedDataAt: this.#transmittedDataAt,
     };
   }
 
   _verifyStrigData(data) {
-    return data != undefined ? data : "";
+    return data != undefined ? data : null;
   }
 
   _verifyDateData(data) {
-    return data != undefined ? this._formatFirestoreDate(data.seconds) : this._formatFirestoreDate(-2208977612);
+    return data != undefined ? this._formatFirestoreDate(data.seconds) : null;
   }
 
   _formatFirestoreDate(serverTimestampField) {

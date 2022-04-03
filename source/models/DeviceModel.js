@@ -1,72 +1,72 @@
 const { serverTimestamp } = require("firebase/firestore");
 
 class DeviceModel {
-  _createdAt;
-  _deviceId;
-  _name;
-  _type;
-  _status;
-  _updatedAt;
+  #createdAt;
+  #deviceId;
+  #name;
+  #type;
+  #status;
+  #updatedAt;
 
   constructor(device = {}) {
-    this._createdAt = this._verifyDateData(device.deviceCreatedAt);
-    this._deviceId = this._verifyStrigData(device.deviceId);
-    this._name = this._verifyStrigData(device.deviceName);
-    this._type = this._verifyStrigData(device.deviceType);
-    this._status = this._verifyBooleanData(device.deviceStatus);
-    this._updatedAt = this._verifyDateData(device.deviceUpdatedAt);
+    this.#createdAt = this._verifyDateData(device.deviceCreatedAt);
+    this.#deviceId = this._verifyStrigData(device.deviceId);
+    this.#name = this._verifyStrigData(device.deviceName);
+    this.#type = this._verifyStrigData(device.deviceType);
+    this.#status = this._verifyBooleanData(device.deviceStatus);
+    this.#updatedAt = this._verifyDateData(device.deviceUpdatedAt);
   }
 
   create() {
     return {
       deviceCreatedAt: serverTimestamp(),
-      deviceName: this._name,
-      deviceType: this._type,
-      deviceStatus: this._status,
+      deviceName: this.#name,
+      deviceType: this.#type,
+      deviceStatus: this.#status,
       deviceUpdatedAt: serverTimestamp(),
     };
   }
 
   get() {
     return {
-      deviceCreatedAt: this._createdAt,
-      deviceId: this._deviceId,
-      deviceName: this._name,
-      deviceType: this._type,
-      deviceStatus: this._status,
-      deviceUpdatedAt: this._updatedAt,
+      deviceCreatedAt: this.#createdAt,
+      deviceId: this.#deviceId,
+      deviceName: this.#name,
+      deviceType: this.#type,
+      deviceStatus: this.#status,
+      deviceUpdatedAt: this.#updatedAt,
     };
   }
 
   toJSON() {
     return {
-      deviceName: this._name,
-      deviceType: this._type,
-      deviceStatus: this._status,
-      deviceUpdatedAt: this._updatedAt,
+      deviceName: this.#name,
+      deviceType: this.#type,
+      deviceStatus: this.#status,
+      deviceUpdatedAt: this.#updatedAt,
     };
   }
 
   update(oldDevice = {}) {
-    this._name = this._name != "" ? this._name : oldDevice.deviceName;
-    this._type = this._type != "" ? this._type : oldDevice.deviceType;
-    this._status =
-      this._status != ""
-        ? oldDevice.deviceStatus === this._status
+    this.#name = this.#name != null ? this.#name : oldDevice.deviceName;
+    this.#type = this.#type != null ? this.#type : oldDevice.deviceType;
+    this.#status =
+      this.#status != null
+        ? oldDevice.deviceStatus === this.#status
           ? oldDevice.deviceStatus
-          : this._status
+          : this.#status
         : oldDevice.deviceStatus;
-    this._updatedAt = serverTimestamp();
+    this.#updatedAt = serverTimestamp();
   }
 
   _verifyStrigData(data) {
-    return data != undefined ? data : "";
+    return data != undefined ? data : null;
   }
   _verifyBooleanData(data) {
-    return data != undefined ? data : false;
+    return data != undefined ? data : null;
   }
   _verifyDateData(data) {
-    return data != undefined ? this._formatFirestoreDate(data.seconds) : this._formatFirestoreDate(-2208977612);
+    return data != undefined ? this._formatFirestoreDate(data.seconds) : null;
   }
 
   _formatFirestoreDate(serverTimestampField) {

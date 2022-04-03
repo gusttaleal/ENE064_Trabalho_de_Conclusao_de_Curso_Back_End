@@ -21,8 +21,7 @@ module.exports.createDevice = async (device) => {
 
 module.exports.readDevice = async (deviceId) => {
   try {
-    const _doc = await getDoc(doc(db, "devices", deviceId));
-    return [{ ..._doc.data(), deviceId: _doc.id }];
+    return await getDoc(doc(db, "devices", deviceId));
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", error: error.message }));
   }
@@ -30,8 +29,7 @@ module.exports.readDevice = async (deviceId) => {
 
 module.exports.readDevices = async () => {
   try {
-    const data = await getDocs(query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc")));
-    return data.docs.map((_doc) => ({ ..._doc.data(), deviceId: _doc.id }));
+    return await getDocs(query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc")));
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - readDevices()", error: error.message }));
   }
