@@ -1,10 +1,12 @@
 const { createData, readData, readDatas, deleteData } = require("../apis/DataAPI.js");
 const DataModel = require("../models/DataModel.js");
 
-module.exports.createData = async (data) => {
+module.exports.createData = async (bodyRequest) => {
+  const { deviceId } = _checkBody(bodyRequest);
+
   try {
-    const _data = new DataModel(data).create();
-    const dataId = (await createData(data.deviceId, _data)).id;
+    const _data = new DataModel(bodyRequest).create();
+    const dataId = (await createData(deviceId, _data)).id;
     return { dataId };
   } catch (error) {
     throw error;
@@ -64,7 +66,7 @@ const _checkBody = (bodyRequest) => {
       JSON.stringify({
         status: 406,
         path: "DataService - readData()",
-        error: `Falta parêmetros obrigatórios.`,
+        error: `Falta parâmetros obrigatórios.`,
       })
     );
   }
@@ -74,25 +76,39 @@ const _checkExistence = (data, deviceId, dataId, sender) => {
   switch (sender) {
     case "DATA":
       if (!data.data()) {
-        throw Error(
-          JSON.stringify({
-            status: 404,
-            path: "DataService - readData()",
-            error: `[deviceId: ${deviceId}][dataId: ${dataId}] Dado não encontrado.`,
-          })
-        );
+        /*
+        Implementar um Logger c/ winston
+
+        const winston = require("winston");
+        const LoggingWinston = require("@google-cloud/logging-winston");
+        
+        */
+        // throw Error(
+        //   JSON.stringify({
+        //     status: 404,
+        //     path: "DataService - readData()",
+        //     error: `[deviceId: ${deviceId}][dataId: ${dataId}] Dado não encontrado.`,
+        //   })
+        // );
       }
       break;
 
     case "DATAS":
       if (!data.length) {
-        throw Error(
-          JSON.stringify({
-            status: 404,
-            path: "DataService - readDatas()",
-            error: `[deviceId: ${deviceId}] Dados não encontrados.`,
-          })
-        );
+        /*
+        Implementar um Logger c/ winston
+
+        const winston = require("winston");
+        const LoggingWinston = require("@google-cloud/logging-winston");
+
+        */
+        // throw Error(
+        //   JSON.stringify({
+        //     status: 404,
+        //     path: "DataService - readDatas()",
+        //     error: `[deviceId: ${deviceId}] Dados não encontrados.`,
+        //   })
+        // );
       }
       break;
 

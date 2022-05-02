@@ -15,7 +15,7 @@ module.exports.createDevice = async (device) => {
   try {
     return await addDoc(collection(db, "devices"), device);
   } catch (error) {
-    throw Error(JSON.stringify({ path: "DeviceRepository - createDevice()", error: error.message }));
+    throw Error(JSON.stringify({ path: "DeviceRepository - createDevice()", message: error.message }));
   }
 };
 
@@ -23,7 +23,7 @@ module.exports.readDevice = async (deviceId) => {
   try {
     return await getDoc(doc(db, "devices", deviceId));
   } catch (error) {
-    throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", error: error.message }));
+    throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", message: error.message }));
   }
 };
 
@@ -31,22 +31,22 @@ module.exports.readDevices = async () => {
   try {
     return await getDocs(query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc")));
   } catch (error) {
-    throw Error(JSON.stringify({ path: "DeviceRepository - readDevices()", error: error.message }));
+    throw Error(JSON.stringify({ path: "DeviceRepository - readDevices()", message: error.message }));
   }
 };
 
-module.exports.updateDevice = async (id, device) => {
+module.exports.updateDevice = async (deviceId, device) => {
   try {
-    await updateDoc(doc(db, "devices", id), device);
+    await updateDoc(doc(db, "devices", deviceId), device);
   } catch (error) {
-    throw Error(JSON.stringify({ path: "DeviceRepository - updateDevice()", error: error.message }));
+    throw Error(JSON.stringify({ path: "DeviceRepository - updateDevice()", message: error.message }));
   }
 };
 
-module.exports.deleteDevice = async (id) => {
+module.exports.deleteDevice = async (deviceId) => {
   try {
-    await deleteDoc(doc(db, "devices", id));
+    await deleteDoc(doc(db, "devices", deviceId));
   } catch (error) {
-    throw Error(JSON.stringify({ path: "DeviceRepository - deleteDevice()", error: error.message }));
+    throw Error(JSON.stringify({ path: "DeviceRepository - deleteDevice()", message: error.message }));
   }
 };

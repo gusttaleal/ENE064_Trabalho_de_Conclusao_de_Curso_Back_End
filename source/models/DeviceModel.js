@@ -2,6 +2,7 @@ const { serverTimestamp } = require("firebase/firestore");
 
 class DeviceModel {
   #createdAt;
+  #userId;
   #deviceId;
   #name;
   #type;
@@ -10,6 +11,7 @@ class DeviceModel {
 
   constructor(device = {}) {
     this.#createdAt = this._verifyDateData(device.deviceCreatedAt);
+    this.#userId = this._verifyStrigData(device.userId);
     this.#deviceId = this._verifyStrigData(device.deviceId);
     this.#name = this._verifyStrigData(device.deviceName);
     this.#type = this._verifyStrigData(device.deviceType);
@@ -20,6 +22,7 @@ class DeviceModel {
   create() {
     return {
       deviceCreatedAt: serverTimestamp(),
+      userId: this.#userId,
       deviceName: this.#name,
       deviceType: this.#type,
       deviceStatus: this.#status,
@@ -30,6 +33,7 @@ class DeviceModel {
   get() {
     return {
       deviceCreatedAt: this.#createdAt,
+      userId: this.#userId,
       deviceId: this.#deviceId,
       deviceName: this.#name,
       deviceType: this.#type,

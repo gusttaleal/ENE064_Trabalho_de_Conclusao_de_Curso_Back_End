@@ -2,9 +2,9 @@ const { createDevice, readDevice, readDevices, updateDevice, deleteDevice } = re
 const { deleteData } = require("./DataService.js");
 const DeviceModel = require("../models/DeviceModel.js");
 
-module.exports.createDevice = async (device) => {
+module.exports.createDevice = async (bodyRequest) => {
   try {
-    const _device = new DeviceModel(device);
+    const _device = new DeviceModel(bodyRequest);
     const deviceId = (await createDevice(_device.create())).id;
     return { deviceId };
   } catch (error) {
@@ -37,8 +37,8 @@ const _readDevices = async () => {
 
     _checkExistence(_devices, null, "DEVICES");
 
-    const device = _devices.map((device) => new DeviceModel(device).get());
-    return device;
+    const devices = _devices.map((device) => new DeviceModel(device).get());
+    return devices;
   } catch (error) {
     throw error;
   }
@@ -110,7 +110,7 @@ const _checkExistence = (data, deviceId, sender) => {
           JSON.stringify({
             status: 404,
             path: "DeviceService - readDevices()",
-            error: `Dispositivos não encontrados.`,
+            error: `[deviceId: ${deviceId}] Dispositivos não encontrados.`,
           })
         );
       }

@@ -1,6 +1,6 @@
 const { serverTimestamp } = require("firebase/firestore");
 
-class dataModel {
+class DataModel {
   #dataId;
   #recivedData;
   #recivedDataAt;
@@ -57,4 +57,4 @@ class dataModel {
   }
 }
 
-module.exports = dataModel;
+module.exports = DataModel;
