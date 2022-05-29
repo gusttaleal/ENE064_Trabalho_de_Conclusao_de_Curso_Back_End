@@ -1,4 +1,4 @@
-const { db } = require("../configurations/FirebaseConfig");
+const { firestoreDataBase } = require("../configurations/FirebaseConfig");
 const {
   doc,
   query,
@@ -13,7 +13,7 @@ const {
 
 module.exports.createDevice = async (device) => {
   try {
-    return await addDoc(collection(db, "devices"), device);
+    return await addDoc(collection(firestoreDataBase, "devices"), device);
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - createDevice()", message: error.message }));
   }
@@ -21,7 +21,7 @@ module.exports.createDevice = async (device) => {
 
 module.exports.readDevice = async (deviceId) => {
   try {
-    return await getDoc(doc(db, "devices", deviceId));
+    return await getDoc(doc(firestoreDataBase, "devices", deviceId));
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - readDevice()", message: error.message }));
   }
@@ -29,7 +29,7 @@ module.exports.readDevice = async (deviceId) => {
 
 module.exports.readDevices = async () => {
   try {
-    return await getDocs(query(collection(db, "devices"), orderBy("deviceCreatedAt", "asc")));
+    return await getDocs(query(collection(firestoreDataBase, "devices"), orderBy("deviceCreatedAt", "asc")));
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - readDevices()", message: error.message }));
   }
@@ -37,7 +37,7 @@ module.exports.readDevices = async () => {
 
 module.exports.updateDevice = async (deviceId, device) => {
   try {
-    await updateDoc(doc(db, "devices", deviceId), device);
+    await updateDoc(doc(firestoreDataBase, "devices", deviceId), device);
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - updateDevice()", message: error.message }));
   }
@@ -45,7 +45,7 @@ module.exports.updateDevice = async (deviceId, device) => {
 
 module.exports.deleteDevice = async (deviceId) => {
   try {
-    await deleteDoc(doc(db, "devices", deviceId));
+    await deleteDoc(doc(firestoreDataBase, "devices", deviceId));
   } catch (error) {
     throw Error(JSON.stringify({ path: "DeviceRepository - deleteDevice()", message: error.message }));
   }

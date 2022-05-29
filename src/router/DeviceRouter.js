@@ -3,16 +3,21 @@ const { readUser } = require("../services/AuthService.js");
 
 const router = express.Router();
 
-const { createDevice, readDevice, updateDevice, deleteDevice } = require("../services/DeviceService.js");
+const {
+  createDevice,
+  readDevice,
+  updateDevice,
+  deleteDevice,
+} = require("../services/DeviceService.js");
 
-router.use(async (req, res, next) => {
-  const { userId } = await readUser(req.body);
-  req.body = { ...req.body, userId };
+// router.use(async (req, res, next) => {
+//   const { userId } = await readUser(req.body);
+//   req.body = { ...req.body, userId };
 
-  next();
-});
+//   next();
+// });
 
-router.post("/post", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const data = await createDevice(req.body);
 
@@ -23,7 +28,7 @@ router.post("/post", async (req, res) => {
   }
 });
 
-router.get("/get", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const data = await readDevice(req.body);
 
@@ -34,7 +39,7 @@ router.get("/get", async (req, res) => {
   }
 });
 
-router.patch("/patch", async (req, res) => {
+router.patch("/", async (req, res) => {
   try {
     const data = await updateDevice(req.body);
 
@@ -45,7 +50,7 @@ router.patch("/patch", async (req, res) => {
   }
 });
 
-router.delete("/delete", async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
     const data = await deleteDevice(req.body);
 

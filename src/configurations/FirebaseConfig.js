@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 // Import the functions you need from the SDKs you need
+const { getAuth } = require("firebase/auth");
 const { initializeApp } = require("firebase/app");
 const { getFirestore } = require("@firebase/firestore");
 
@@ -17,4 +18,10 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // Create a connection with Firebase Firestore
-module.exports.db = getFirestore(app);
+const firestoreDataBase = getFirestore(app);
+const verifyIdToken = (idToken) => getAuth().verifyIdToken(idToken);
+
+module.exports = {
+  firestoreDataBase,
+  verifyIdToken,
+};

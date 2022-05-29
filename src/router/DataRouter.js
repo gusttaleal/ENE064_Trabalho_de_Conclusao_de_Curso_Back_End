@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { createData, readData } = require("../services/DataService.js");
 
-router.post("/post", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const data = await createData(req.body);
 
@@ -15,7 +15,7 @@ router.post("/post", async (req, res) => {
   }
 });
 
-router.get("/get", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const data = await readData(req.body);
 
