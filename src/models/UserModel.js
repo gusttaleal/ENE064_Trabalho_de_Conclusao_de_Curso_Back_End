@@ -1,63 +1,40 @@
-const { serverTimestamp } = require("firebase/firestore");
-const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
+const { Timestamp } = require("firebase/firestore");
+const { encryptData } = require("../utils/encryptData");
 
 class UserModel {
-  #createdAt;
+  #userCreatedAt;
   #userId;
-  #secret;
-  #token;
-  #updatedAt;
+  #email;
 
   constructor(user = {}) {
-    this.#createdAt = this._verifyDateData(user.userCreatedAt);
+    this.#userCreatedAt = this._verifyDateData(user.userCreatedAt);
     this.#userId = this._verifyStrigData(user.userId);
-    this.#secret = this._verifyStrigData(user.userSecret);
-    this.#token = this._verifyStrigData(user.accessToken);
-    this.#updatedAt = this._verifyDateData(user.userUpdatedAt);
-  }
-
-  create() {
-    const _userSecret = this._createUserSecret();
-    const _accessToken = this._createUserToken(_userSecret);
-
-    return {
-      userCreatedAt: serverTimestamp(),
-      userSecret: _userSecret,
-      accessToken: _accessToken,
-      userUpdatedAt: serverTimestamp(),
-    };
+    this.#email = this._cryptoData(user.email);
   }
 
   get() {
     return {
-      userCreatedAt: this.#createdAt,
+      userCreatedAt: this.#userCreatedAt,
       userId: this.#userId,
-      accessToken: this.#token,
-      userUpdatedAt: this.#updatedAt,
+      email: this.#email,
+      deleted: false,
     };
   }
 
-  toJSON() {
+  set() {
     return {
-      userSecret: this.#secret,
-      accessToken: this.#token,
-      userUpdatedAt: this.#updatedAt,
+      userCreatedAt: this.#userCreatedAt,
+      userId: this.#userId,
+      email: this.#email,
+      deleted: true,
     };
   }
 
-  update(oldUser = {}) {
-    this.#secret = this.#secret != null ? this.#secret : oldUser.userSecret;
-    this.#token = this.#token != null ? this.#token : oldUser.accessToken;
-    this.#updatedAt = serverTimestamp();
-  }
-
-  _createUserSecret() {
-    return crypto.randomBytes(256).toString("hex");
-  }
-
-  _createUserToken(secret) {
-    return jwt.sign({ userType: "user", admin: false }, secret);
+  _cryptoData(data) {
+    if (typeof data == "string") {
+      return data != undefined ? encryptData(data) : null;
+    }
+    return data != undefined ? data : null;
   }
 
   _verifyStrigData(data) {
@@ -65,12 +42,10 @@ class UserModel {
   }
 
   _verifyDateData(data) {
-    return data != undefined ? this._formatFirestoreDate(data.seconds) : null;
-  }
-
-  _formatFirestoreDate(serverTimestampField) {
-    const date = new Date(serverTimestampField * 1000).toLocaleString("pt-BR");
-    return date;
+    if (typeof data == "string") {
+      return data != undefined ? Timestamp.fromDate(new Date(data * 1)) : null;
+    }
+    return data != undefined ? data : null;
   }
 }
 

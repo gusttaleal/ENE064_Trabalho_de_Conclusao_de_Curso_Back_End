@@ -1,4 +1,10 @@
-const { createDevice, readDevice, readDevices, updateDevice, deleteDevice } = require("../apis/DeviceAPI.js");
+const {
+  createDevice,
+  readDevice,
+  readDevices,
+  updateDevice,
+  deleteDevice,
+} = require("../apis/DeviceAPI.js");
 const { deleteData } = require("./DataService.js");
 const DeviceModel = require("../models/DeviceModel.js");
 
@@ -33,7 +39,10 @@ module.exports.readDevice = async (bodyRequest) => {
 const _readDevices = async () => {
   try {
     const result = await readDevices();
-    const _devices = result.docs.map((_doc) => ({ ..._doc.data(), deviceId: _doc.id }));
+    const _devices = result.docs.map((_doc) => ({
+      ..._doc.data(),
+      deviceId: _doc.id,
+    }));
 
     _checkExistence(_devices, null, "DEVICES");
 
@@ -98,7 +107,7 @@ const _checkExistence = (data, deviceId, sender) => {
           JSON.stringify({
             status: 404,
             path: "DeviceService - readDevice()",
-            error: `[deviceId: ${deviceId}] Dispositivo não encontrado.`,
+            message: `[deviceId: ${deviceId}] Dispositivo não encontrado.`,
           })
         );
       }
@@ -110,7 +119,7 @@ const _checkExistence = (data, deviceId, sender) => {
           JSON.stringify({
             status: 404,
             path: "DeviceService - readDevices()",
-            error: `[deviceId: ${deviceId}] Dispositivos não encontrados.`,
+            message: `[deviceId: ${deviceId}] Dispositivos não encontrados.`,
           })
         );
       }

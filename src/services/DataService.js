@@ -1,4 +1,9 @@
-const { createData, readData, readDatas, deleteData } = require("../apis/DataAPI.js");
+const {
+  createData,
+  readData,
+  readDatas,
+  deleteData,
+} = require("../apis/DataAPI.js");
 const DataModel = require("../models/DataModel.js");
 
 module.exports.createData = async (bodyRequest) => {
@@ -34,7 +39,10 @@ module.exports.readData = async (bodyRequest) => {
 const _readDatas = async (deviceId) => {
   try {
     const result = await readDatas(deviceId);
-    const _datas = result.docs.map((_doc) => ({ ..._doc.data(), dataId: _doc.id }));
+    const _datas = result.docs.map((_doc) => ({
+      ..._doc.data(),
+      dataId: _doc.id,
+    }));
 
     _checkExistence(_datas, deviceId, null, "DATAS");
 
@@ -66,7 +74,7 @@ const _checkBody = (bodyRequest) => {
       JSON.stringify({
         status: 406,
         path: "DataService - readData()",
-        error: `Falta parâmetros obrigatórios.`,
+        message: `Falta parâmetros obrigatórios.`,
       })
     );
   }
@@ -87,7 +95,7 @@ const _checkExistence = (data, deviceId, dataId, sender) => {
         //   JSON.stringify({
         //     status: 404,
         //     path: "DataService - readData()",
-        //     error: `[deviceId: ${deviceId}][dataId: ${dataId}] Dado não encontrado.`,
+        //     message: `[deviceId: ${deviceId}][dataId: ${dataId}] Dado não encontrado.`,
         //   })
         // );
       }
@@ -106,7 +114,7 @@ const _checkExistence = (data, deviceId, dataId, sender) => {
         //   JSON.stringify({
         //     status: 404,
         //     path: "DataService - readDatas()",
-        //     error: `[deviceId: ${deviceId}] Dados não encontrados.`,
+        //     message: `[deviceId: ${deviceId}] Dados não encontrados.`,
         //   })
         // );
       }
