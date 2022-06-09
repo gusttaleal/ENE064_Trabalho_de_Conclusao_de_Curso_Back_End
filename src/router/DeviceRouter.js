@@ -1,5 +1,4 @@
 const express = require("express");
-const { readUser } = require("../services/AuthService.js");
 
 const router = express.Router();
 
@@ -9,13 +8,6 @@ const {
   updateDevice,
   deleteDevice,
 } = require("../services/DeviceService.js");
-
-// router.use(async (req, res, next) => {
-//   const { userId } = await readUser(req.body);
-//   req.body = { ...req.body, userId };
-
-//   next();
-// });
 
 router.post("/", async (req, res) => {
   try {
