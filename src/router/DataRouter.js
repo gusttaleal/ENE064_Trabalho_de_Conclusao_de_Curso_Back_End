@@ -17,7 +17,11 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
-    const data = await readData(req.body);
+    const param = {
+      deviceId: req.url.split("=")[req.url.split("=").length - 1],
+      dataId: null,
+    };
+    const data = await readData(param);
 
     res.status(200).send(data);
   } catch (error) {
