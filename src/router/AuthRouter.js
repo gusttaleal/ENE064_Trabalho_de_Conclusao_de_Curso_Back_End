@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { createUser, deleteUser } = require("../services/AuthService.js");
+const { createUser } = require("../services/AuthService.js");
 
 router.post("/", async (req, res) => {
   try {
