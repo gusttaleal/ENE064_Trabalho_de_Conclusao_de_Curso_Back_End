@@ -21,9 +21,9 @@ app.use("/data", dataRouter);
 app.use("/auth", authRouter);
 
 const PORT = process.env.PORT;
-const hostname = process.env.HOSTNAME;
+const HOSTNAME = process.env.HOSTNAME;
 
-server.listen(PORT, hostname);
+server.listen(PORT, HOSTNAME);
 server.on("listening", () => {
   console.log(
     "Express server started on port %s at %s",
