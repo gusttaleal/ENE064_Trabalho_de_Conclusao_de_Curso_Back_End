@@ -1,4 +1,9 @@
-const { createData, readData, readDatas } = require("../apis/DataAPI.js");
+const {
+  createData,
+  readData,
+  deleteData,
+  readDatas,
+} = require("../apis/DataAPI.js");
 const DataModel = require("../models/DataModel.js");
 
 module.exports.createData = async (bodyRequest) => {
@@ -26,6 +31,17 @@ module.exports.readData = async (bodyRequest) => {
     }
   } else {
     return await _readDatas(deviceId);
+  }
+};
+
+module.exports.deleteData = async (deviceId) => {
+  try {
+    const datas = await _readDatas(deviceId);
+    datas.map(async (data) => {
+      await deleteData(deviceId, data.dataId);
+    });
+  } catch (error) {
+    throw error;
   }
 };
 

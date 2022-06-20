@@ -7,6 +7,7 @@ const {
   addDoc,
   getDoc,
   getDocs,
+  deleteDoc,
 } = require("firebase/firestore");
 
 module.exports.createData = async (deviceId, data) => {
@@ -52,6 +53,21 @@ module.exports.readDatas = async (deviceId) => {
     throw Error(
       JSON.stringify({
         path: "DataRepository - readDatas()",
+        message: error.message,
+      })
+    );
+  }
+};
+
+module.exports.deleteData = async (deviceId, dataId) => {
+  try {
+    await deleteDoc(
+      doc(firestoreDataBase, "devices", deviceId, "data", dataId)
+    );
+  } catch (error) {
+    throw Error(
+      JSON.stringify({
+        path: "DataRepository - deleteData()",
         message: error.message,
       })
     );
